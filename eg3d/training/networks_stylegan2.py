@@ -432,7 +432,7 @@ class SynthesisBlock(torch.nn.Module):
             x = self.const.to(dtype=dtype, memory_format=memory_format)
             x = x.unsqueeze(0).repeat([ws.shape[0], 1, 1, 1])
         else:
-            misc.assert_shape(x, [None, self.in_channels, self.resolution // 2, self.resolution // 2])
+            misc.assert_shape(x, [ws.shape[0], self.in_channels, self.resolution // 2, self.resolution // 2])
             x = x.to(dtype=dtype, memory_format=memory_format)
 
         # Main layers.

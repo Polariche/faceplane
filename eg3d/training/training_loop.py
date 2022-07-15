@@ -172,7 +172,8 @@ def training_loop(
     if rank == 0:
         z = torch.empty([batch_gpu, G.z_dim], device=device)
         c = torch.empty([batch_gpu, G.c_dim], device=device)
-        img = misc.print_module_summary(G, [z, c])
+        p = torch.eye(4, device=device).view(-1).unsqueeze(0).unsqueeze(1).expand(batch_gpu, 2, -1)
+        img = misc.print_module_summary(G, [z, c, p])
         misc.print_module_summary(D, [img, c])
 
     # Setup augmentation.
@@ -271,18 +272,19 @@ def training_loop(
             all_gen_c = [phase_gen_c.split(batch_gpu) for phase_gen_c in all_gen_c.split(batch_size)]
 
             # generate planes
-            all_gen_p_pos = torch.randn([len(phases) * batch_size, 3], device=device)
+            all_gen_p_pos = torch.randn([len(phases) * batch_size, 8, 3], device=device)
             all_gen_p_rot3 = all_gen_p_pos + torch.randn_like(all_gen_p_pos) * 1e-2
             all_gen_p_rot3 = torch.nn.functional.normalize(all_gen_p_rot3, dim=-1)
-            all_gen_p_rot2 = torch.stack([-all_gen_p_rot3[..., 2], torch.zeros_like(all_gen_p_rot3[..., 0]), all_gen_p_rot3[..., 0]], dim=1)
+            all_gen_p_rot2 = torch.stack([-all_gen_p_rot3[..., 2], torch.zeros_like(all_gen_p_rot3[..., 0]), all_gen_p_rot3[..., 0]], dim=-1)
             all_gen_p_rot2 = torch.nn.functional.normalize(all_gen_p_rot2, dim=-1)
             all_gen_p_rot1 = torch.linalg.cross(all_gen_p_rot3, all_gen_p_rot2)
             all_gen_p_rot1 = torch.nn.functional.normalize(all_gen_p_rot1, dim=-1)
 
-            all_gen_p = torch.stack([all_gen_p_rot1, all_gen_p_rot2, all_gen_p_rot3, all_gen_p_pos], dim=1)     # (phases*batch_size, 4, 3)
-            all_gen_p = torch.cat([all_gen_p, torch.zeros_like(all_gen_p[..., :1])], dim=2)                     # (phases*batch_size, 4, 4)
-            all_gen_p = all_gen_p.transpose(-2,-1)
-            all_gen_p[:, -1,-1] = 1
+            all_gen_p = torch.stack([all_gen_p_rot1, all_gen_p_rot2, all_gen_p_rot3, all_gen_p_pos], dim=-2)     # (phases*batch_size, P, 4, 3)
+            all_gen_p = torch.cat([all_gen_p, torch.zeros_like(all_gen_p[..., :1])], dim=-1)                     # (phases*batch_size, P, 4, 4)
+            #all_gen_p = all_gen_p.transpose(-2,-1)
+            all_gen_p[..., 3, 3] = 1
+            all_gen_p = all_gen_p.view(*all_gen_p.shape[:-2], 16)
             all_gen_p = [phase_gen_p.split(batch_gpu) for phase_gen_p in all_gen_p.split(batch_size)]
 
         # Execute training phases.

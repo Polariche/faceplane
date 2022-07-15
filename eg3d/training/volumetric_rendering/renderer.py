@@ -44,15 +44,16 @@ def project_onto_planes(planes, coordinates):
     Does a projection of a 3D point onto a batch of 2D planes,
     returning 2D plane coordinates.
 
-    Takes plane axes of shape n_planes, 3, 3
+    Takes plane axes of shape N, n_planes, 3, 3
     # Takes coordinates of shape N, M, 3
     # returns projections of shape N*n_planes, M, 2
     """
     N, M, C = coordinates.shape
-    n_planes, _, _ = planes.shape
+    _, n_planes, _, _ = planes.shape
     coordinates = torch.cat([coordinates, torch.ones_like(coordinates)[..., :1]], dim=-1)
     coordinates = coordinates.unsqueeze(1).expand(-1, n_planes, -1, -1).reshape(N*n_planes, M, 4)
-    inv_planes = torch.linalg.inv(planes).unsqueeze(0).expand(N, -1, -1, -1).reshape(N*n_planes, 4, 4)
+
+    inv_planes = torch.linalg.inv(planes.transpose(-2,-1)).reshape(N*n_planes, 4, 4)
     projections = torch.bmm(coordinates, inv_planes)
 
     return projections[..., :2]

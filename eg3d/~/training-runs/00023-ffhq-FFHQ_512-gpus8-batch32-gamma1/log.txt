@@ -1,0 +1,226 @@
+Loading training set...
+
+Num images:  70000
+Image shape: [3, 512, 512]
+Label shape: [25]
+
+Constructing networks...
+torch.Size([4, 8, 16])
+Setting up PyTorch plugin "bias_act_plugin"... Done.
+Process SpawnProcess-3:
+Process SpawnProcess-2:
+Process SpawnProcess-8:
+Process SpawnProcess-7:
+Process SpawnProcess-6:
+Traceback (most recent call last):
+  File "/opt/conda/lib/python3.7/site-packages/torch/multiprocessing/spawn.py", line 69, in _wrap
+    fn(i, *args)
+  File "/workspace/docker/faceplane/eg3d/train.py", line 52, in subprocess_fn
+    training_loop.training_loop(rank=rank, **c)
+  File "/workspace/docker/faceplane/eg3d/training/training_loop.py", line 197, in training_loop
+    torch.distributed.broadcast(param, src=0)
+  File "/opt/conda/lib/python3.7/site-packages/torch/distributed/distributed_c10d.py", line 1193, in broadcast
+    work = default_pg.broadcast([tensor], opts)
+RuntimeError: [2] is setting up NCCL communicator and retreiving ncclUniqueId from [0] via c10d key-value store by key '0', but store->get('0') got error: open(/tmp/tmpb6tunlvr/.torch_distributed_init): No such file or directory
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+Traceback (most recent call last):
+  File "/opt/conda/lib/python3.7/multiprocessing/process.py", line 297, in _bootstrap
+    self.run()
+  File "/opt/conda/lib/python3.7/multiprocessing/process.py", line 99, in run
+    self._target(*self._args, **self._kwargs)
+  File "/opt/conda/lib/python3.7/site-packages/torch/multiprocessing/spawn.py", line 69, in _wrap
+    fn(i, *args)
+  File "/opt/conda/lib/python3.7/site-packages/torch/multiprocessing/spawn.py", line 69, in _wrap
+    fn(i, *args)
+KeyboardInterrupt
+  File "/workspace/docker/faceplane/eg3d/train.py", line 52, in subprocess_fn
+    training_loop.training_loop(rank=rank, **c)
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/workspace/docker/faceplane/eg3d/training/training_loop.py", line 197, in training_loop
+    torch.distributed.broadcast(param, src=0)
+  File "/opt/conda/lib/python3.7/multiprocessing/process.py", line 297, in _bootstrap
+    self.run()
+  File "/opt/conda/lib/python3.7/site-packages/torch/distributed/distributed_c10d.py", line 1193, in broadcast
+    work = default_pg.broadcast([tensor], opts)
+  File "/opt/conda/lib/python3.7/site-packages/torch/utils/data/_utils/signal_handling.py", line 66, in handler
+    _error_if_any_worker_fails()
+RuntimeError: DataLoader worker (pid 113976) is killed by signal: Interrupt. 
+RuntimeError: [7] is setting up NCCL communicator and retreiving ncclUniqueId from [0] via c10d key-value store by key '0', but store->get('0') got error: open(/tmp/tmpb6tunlvr/.torch_distributed_init): No such file or directory
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/opt/conda/lib/python3.7/multiprocessing/process.py", line 297, in _bootstrap
+    self.run()
+  File "/opt/conda/lib/python3.7/multiprocessing/process.py", line 99, in run
+    self._target(*self._args, **self._kwargs)
+  File "/opt/conda/lib/python3.7/site-packages/torch/multiprocessing/spawn.py", line 69, in _wrap
+    fn(i, *args)
+KeyboardInterrupt
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/opt/conda/lib/python3.7/multiprocessing/process.py", line 297, in _bootstrap
+    self.run()
+  File "/opt/conda/lib/python3.7/site-packages/torch/utils/data/_utils/signal_handling.py", line 66, in handler
+    _error_if_any_worker_fails()
+RuntimeError: DataLoader worker (pid 113982) is killed by signal: Interrupt. 
+Traceback (most recent call last):
+  File "/opt/conda/lib/python3.7/site-packages/torch/multiprocessing/spawn.py", line 69, in _wrap
+    fn(i, *args)
+  File "/workspace/docker/faceplane/eg3d/train.py", line 52, in subprocess_fn
+    training_loop.training_loop(rank=rank, **c)
+  File "/workspace/docker/faceplane/eg3d/training/training_loop.py", line 197, in training_loop
+    torch.distributed.broadcast(param, src=0)
+  File "/opt/conda/lib/python3.7/site-packages/torch/distributed/distributed_c10d.py", line 1193, in broadcast
+    work = default_pg.broadcast([tensor], opts)
+RuntimeError: [1] is setting up NCCL communicator and retreiving ncclUniqueId from [0] via c10d key-value store by key '0', but store->get('0') got error: open(/tmp/tmpb6tunlvr/.torch_distributed_init): No such file or directory
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/opt/conda/lib/python3.7/multiprocessing/process.py", line 297, in _bootstrap
+    self.run()
+  File "/opt/conda/lib/python3.7/multiprocessing/process.py", line 99, in run
+    self._target(*self._args, **self._kwargs)
+  File "/opt/conda/lib/python3.7/site-packages/torch/multiprocessing/spawn.py", line 69, in _wrap
+    fn(i, *args)
+KeyboardInterrupt
+
+During handling of the above exception, another exception occurred:
+
+Process SpawnProcess-5:
+Process SpawnProcess-4:
+Traceback (most recent call last):
+  File "/opt/conda/lib/python3.7/multiprocessing/process.py", line 297, in _bootstrap
+    self.run()
+  File "/opt/conda/lib/python3.7/site-packages/torch/utils/data/_utils/signal_handling.py", line 66, in handler
+    _error_if_any_worker_fails()
+RuntimeError: DataLoader worker (pid 113978) is killed by signal: Interrupt. 
+Traceback (most recent call last):
+Traceback (most recent call last):
+  File "/opt/conda/lib/python3.7/site-packages/torch/multiprocessing/spawn.py", line 69, in _wrap
+    fn(i, *args)
+  File "/workspace/docker/faceplane/eg3d/train.py", line 52, in subprocess_fn
+    training_loop.training_loop(rank=rank, **c)
+  File "/workspace/docker/faceplane/eg3d/training/training_loop.py", line 197, in training_loop
+    torch.distributed.broadcast(param, src=0)
+  File "/opt/conda/lib/python3.7/site-packages/torch/multiprocessing/spawn.py", line 69, in _wrap
+    fn(i, *args)
+  File "/opt/conda/lib/python3.7/site-packages/torch/distributed/distributed_c10d.py", line 1193, in broadcast
+    work = default_pg.broadcast([tensor], opts)
+  File "/workspace/docker/faceplane/eg3d/train.py", line 52, in subprocess_fn
+    training_loop.training_loop(rank=rank, **c)
+  File "/workspace/docker/faceplane/eg3d/training/training_loop.py", line 197, in training_loop
+    torch.distributed.broadcast(param, src=0)
+RuntimeError: [6] is setting up NCCL communicator and retreiving ncclUniqueId from [0] via c10d key-value store by key '0', but store->get('0') got error: open(/tmp/tmpb6tunlvr/.torch_distributed_init): No such file or directory
+  File "/opt/conda/lib/python3.7/site-packages/torch/distributed/distributed_c10d.py", line 1193, in broadcast
+    work = default_pg.broadcast([tensor], opts)
+
+During handling of the above exception, another exception occurred:
+
+RuntimeError: [5] is setting up NCCL communicator and retreiving ncclUniqueId from [0] via c10d key-value store by key '0', but store->get('0') got error: open(/tmp/tmpb6tunlvr/.torch_distributed_init): No such file or directory
+Traceback (most recent call last):
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/opt/conda/lib/python3.7/multiprocessing/process.py", line 297, in _bootstrap
+    self.run()
+  File "/opt/conda/lib/python3.7/multiprocessing/process.py", line 297, in _bootstrap
+    self.run()
+  File "/opt/conda/lib/python3.7/multiprocessing/process.py", line 99, in run
+    self._target(*self._args, **self._kwargs)
+  File "/opt/conda/lib/python3.7/multiprocessing/process.py", line 99, in run
+    self._target(*self._args, **self._kwargs)
+  File "/opt/conda/lib/python3.7/site-packages/torch/multiprocessing/spawn.py", line 69, in _wrap
+    fn(i, *args)
+  File "/opt/conda/lib/python3.7/site-packages/torch/multiprocessing/spawn.py", line 69, in _wrap
+    fn(i, *args)
+KeyboardInterrupt
+KeyboardInterrupt
+
+During handling of the above exception, another exception occurred:
+
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+Traceback (most recent call last):
+  File "/opt/conda/lib/python3.7/multiprocessing/process.py", line 297, in _bootstrap
+    self.run()
+  File "/opt/conda/lib/python3.7/site-packages/torch/utils/data/_utils/signal_handling.py", line 66, in handler
+    _error_if_any_worker_fails()
+  File "/opt/conda/lib/python3.7/multiprocessing/process.py", line 297, in _bootstrap
+    self.run()
+RuntimeError: DataLoader worker (pid 113975) is killed by signal: Interrupt. 
+  File "/opt/conda/lib/python3.7/site-packages/torch/utils/data/_utils/signal_handling.py", line 66, in handler
+    _error_if_any_worker_fails()
+RuntimeError: DataLoader worker (pid 113983) is killed by signal: Interrupt. 
+Traceback (most recent call last):
+  File "/opt/conda/lib/python3.7/site-packages/torch/multiprocessing/spawn.py", line 69, in _wrap
+    fn(i, *args)
+  File "/workspace/docker/faceplane/eg3d/train.py", line 52, in subprocess_fn
+    training_loop.training_loop(rank=rank, **c)
+  File "/workspace/docker/faceplane/eg3d/training/training_loop.py", line 197, in training_loop
+    torch.distributed.broadcast(param, src=0)
+  File "/opt/conda/lib/python3.7/site-packages/torch/distributed/distributed_c10d.py", line 1193, in broadcast
+    work = default_pg.broadcast([tensor], opts)
+RuntimeError: [4] is setting up NCCL communicator and retreiving ncclUniqueId from [0] via c10d key-value store by key '0', but store->get('0') got error: open(/tmp/tmpb6tunlvr/.torch_distributed_init): No such file or directory
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/opt/conda/lib/python3.7/multiprocessing/process.py", line 297, in _bootstrap
+    self.run()
+  File "/opt/conda/lib/python3.7/multiprocessing/process.py", line 99, in run
+    self._target(*self._args, **self._kwargs)
+  File "/opt/conda/lib/python3.7/site-packages/torch/multiprocessing/spawn.py", line 69, in _wrap
+    fn(i, *args)
+KeyboardInterrupt
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/opt/conda/lib/python3.7/multiprocessing/process.py", line 297, in _bootstrap
+    self.run()
+  File "/opt/conda/lib/python3.7/site-packages/torch/utils/data/_utils/signal_handling.py", line 66, in handler
+    _error_if_any_worker_fails()
+RuntimeError: DataLoader worker (pid 113981) is killed by signal: Interrupt. 
+Traceback (most recent call last):
+  File "/opt/conda/lib/python3.7/site-packages/torch/multiprocessing/spawn.py", line 69, in _wrap
+    fn(i, *args)
+  File "/workspace/docker/faceplane/eg3d/train.py", line 52, in subprocess_fn
+    training_loop.training_loop(rank=rank, **c)
+  File "/workspace/docker/faceplane/eg3d/training/training_loop.py", line 197, in training_loop
+    torch.distributed.broadcast(param, src=0)
+  File "/opt/conda/lib/python3.7/site-packages/torch/distributed/distributed_c10d.py", line 1193, in broadcast
+    work = default_pg.broadcast([tensor], opts)
+RuntimeError: [3] is setting up NCCL communicator and retreiving ncclUniqueId from [0] via c10d key-value store by key '0', but store->get('0') got error: open(/tmp/tmpb6tunlvr/.torch_distributed_init): No such file or directory
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/opt/conda/lib/python3.7/multiprocessing/process.py", line 297, in _bootstrap
+    self.run()
+  File "/opt/conda/lib/python3.7/multiprocessing/process.py", line 99, in run
+    self._target(*self._args, **self._kwargs)
+  File "/opt/conda/lib/python3.7/site-packages/torch/multiprocessing/spawn.py", line 69, in _wrap
+    fn(i, *args)
+KeyboardInterrupt
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/opt/conda/lib/python3.7/multiprocessing/process.py", line 297, in _bootstrap
+    self.run()
+  File "/opt/conda/lib/python3.7/site-packages/torch/utils/data/_utils/signal_handling.py", line 66, in handler
+    _error_if_any_worker_fails()
+RuntimeError: DataLoader worker (pid 113980) is killed by signal: Interrupt. 
