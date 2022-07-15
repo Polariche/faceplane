@@ -270,8 +270,23 @@ def training_loop(
             all_gen_c = torch.from_numpy(np.stack(all_gen_c)).pin_memory().to(device)
             all_gen_c = [phase_gen_c.split(batch_gpu) for phase_gen_c in all_gen_c.split(batch_size)]
 
+            # generate planes
+            all_gen_p_pos = torch.randn([len(phases) * batch_size, 3], device=device)
+            all_gen_p_rot3 = all_gen_p_pos + torch.randn_like(all_gen_p_pos) * 1e-2
+            all_gen_p_rot3 = torch.nn.functional.normalize(all_gen_p_rot3, dim=-1)
+            all_gen_p_rot2 = torch.stack([-all_gen_p_rot3[..., 2], torch.zeros_like(all_gen_p_rot3[..., 0]), all_gen_p_rot3[..., 0]], dim=1)
+            all_gen_p_rot2 = torch.nn.functional.normalize(all_gen_p_rot2, dim=-1)
+            all_gen_p_rot1 = torch.linalg.cross(all_gen_p_rot3, all_gen_p_rot2)
+            all_gen_p_rot1 = torch.nn.functional.normalize(all_gen_p_rot1, dim=-1)
+
+            all_gen_p = torch.stack([all_gen_p_rot1, all_gen_p_rot2, all_gen_p_rot3, all_gen_p_pos], dim=1)     # (phases*batch_size, 4, 3)
+            all_gen_p = torch.cat([all_gen_p, torch.zeros_like(all_gen_p[..., :1])], dim=2)                     # (phases*batch_size, 4, 4)
+            all_gen_p = all_gen_p.transpose(-2,-1)
+            all_gen_p[:, -1,-1] = 1
+            all_gen_p = [phase_gen_p.split(batch_gpu) for phase_gen_p in all_gen_p.split(batch_size)]
+
         # Execute training phases.
-        for phase, phase_gen_z, phase_gen_c in zip(phases, all_gen_z, all_gen_c):
+        for phase, phase_gen_z, phase_gen_c, phase_gen_p in zip(phases, all_gen_z, all_gen_c, all_gen_p):
             if batch_idx % phase.interval != 0:
                 continue
             if phase.start_event is not None:
@@ -280,8 +295,8 @@ def training_loop(
             # Accumulate gradients.
             phase.opt.zero_grad(set_to_none=True)
             phase.module.requires_grad_(True)
-            for real_img, real_c, gen_z, gen_c in zip(phase_real_img, phase_real_c, phase_gen_z, phase_gen_c):
-                loss.accumulate_gradients(phase=phase.name, real_img=real_img, real_c=real_c, gen_z=gen_z, gen_c=gen_c, gain=phase.interval, cur_nimg=cur_nimg)
+            for real_img, real_c, gen_z, gen_c, gen_p in zip(phase_real_img, phase_real_c, phase_gen_z, phase_gen_c, phase_gen_p):
+                loss.accumulate_gradients(phase=phase.name, real_img=real_img, real_c=real_c, gen_z=gen_z, gen_c=gen_c, gen_p=gen_p, gain=phase.interval, cur_nimg=cur_nimg)
             phase.module.requires_grad_(False)
 
             # Update weights.

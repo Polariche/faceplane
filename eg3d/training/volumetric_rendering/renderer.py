@@ -26,15 +26,18 @@ def generate_planes():
     plane. Should work with arbitrary number of planes and planes of
     arbitrary orientation.
     """
-    return torch.tensor([[[1, 0, 0],
-                            [0, 1, 0],
-                            [0, 0, 1]],
-                            [[1, 0, 0],
-                            [0, 0, 1],
-                            [0, 1, 0]],
-                            [[0, 0, 1],
-                            [1, 0, 0],
-                            [0, 1, 0]]], dtype=torch.float32)
+    return torch.tensor([[[1, 0, 0, 0],
+                            [0, 1, 0, 0],
+                            [0, 0, 1, 0],
+                            [0, 0, 0, 1]],
+                            [[1, 0, 0, 0],
+                            [0, 0, 1, 0],
+                            [0, 1, 0, 0],
+                            [0, 0, 0, 1]],
+                            [[0, 0, 1, 0],
+                            [1, 0, 0, 0],
+                            [0, 1, 0, 0],
+                            [0, 0, 0, 1]]], dtype=torch.float32)
 
 def project_onto_planes(planes, coordinates):
     """
@@ -47,9 +50,11 @@ def project_onto_planes(planes, coordinates):
     """
     N, M, C = coordinates.shape
     n_planes, _, _ = planes.shape
-    coordinates = coordinates.unsqueeze(1).expand(-1, n_planes, -1, -1).reshape(N*n_planes, M, 3)
-    inv_planes = torch.linalg.inv(planes).unsqueeze(0).expand(N, -1, -1, -1).reshape(N*n_planes, 3, 3)
+    coordinates = torch.cat([coordinates, torch.ones_like(coordinates)[..., :1]], dim=-1)
+    coordinates = coordinates.unsqueeze(1).expand(-1, n_planes, -1, -1).reshape(N*n_planes, M, 4)
+    inv_planes = torch.linalg.inv(planes).unsqueeze(0).expand(N, -1, -1, -1).reshape(N*n_planes, 4, 4)
     projections = torch.bmm(coordinates, inv_planes)
+
     return projections[..., :2]
 
 def sample_from_planes(plane_axes, plane_features, coordinates, mode='bilinear', padding_mode='zeros', box_warp=None):
@@ -59,7 +64,6 @@ def sample_from_planes(plane_axes, plane_features, coordinates, mode='bilinear',
     plane_features = plane_features.view(N*n_planes, C, H, W)
 
     coordinates = (2/box_warp) * coordinates # TODO: add specific box bounds
-
     projected_coordinates = project_onto_planes(plane_axes, coordinates).unsqueeze(1)
     output_features = torch.nn.functional.grid_sample(plane_features, projected_coordinates.float(), mode=mode, padding_mode=padding_mode, align_corners=False).permute(0, 3, 2, 1).reshape(N, n_planes, M, C)
     return output_features

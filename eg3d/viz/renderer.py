@@ -286,6 +286,21 @@ class Renderer:
         G.rendering_kwargs['depth_resolution'] = int(G.rendering_kwargs['depth_resolution_default'] * depth_mult)
         G.rendering_kwargs['depth_resolution_importance'] = int(G.rendering_kwargs['depth_resolution_importance_default'] * depth_importance_mult)
 
+        
+        G.renderer.plane_axes = torch.tensor([[[1, 0, 0, 0],
+                                                [0, 1, 0, 0],
+                                                [0, 0, 1, 0],
+                                                [0, 0.5, 0, 1]],
+                                                [[1, 0, 0, 0],
+                                                [0, 0, 1, 0],
+                                                [0, 1, 0, 0],
+                                                [0, 0, 0.5, 1]],
+                                                [[0, 0, 1, 0],
+                                                [1, 0, 0, 0],
+                                                [0, 1, 0, 0],
+                                                [0.5, 0, 0, 1]]], dtype=torch.float32)
+
+
         # Set input transform.
         if res.has_input_transform:
             m = np.eye(3)
