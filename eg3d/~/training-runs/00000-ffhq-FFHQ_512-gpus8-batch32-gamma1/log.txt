@@ -1,4 +1,0 @@
-Loading training set...
-
-Num images:  70000
-Image shape: [3, 512, 512]
